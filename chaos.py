@@ -4,14 +4,14 @@ import time
 
 def inject_failure():
     failures = [
-        "docker kill llm-api",
-        "docker kill llm",
-        "docker compose restart llm-api",
-        "docker compose restart llm"
+        ["docker", "kill", "llm-api"],
+        ["docker", "kill", "llm"],
+        ["docker", "compose", "restart", "llm-api"],
+        ["docker", "compose", "restart", "llm"]
     ]
     cmd = random.choice(failures)
-    print(f"[CHAOS] Injecting failure: {cmd}")
-    subprocess.run(cmd, shell=True)
+    print(f"[CHAOS] Injecting failure: {' '.join(cmd)}")
+    subprocess.run(cmd, shell=False)
 
 while True:
     wait = random.randint(5, 15)
