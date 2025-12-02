@@ -1,0 +1,21 @@
+services:
+  llm:
+    image: ollama/ollama
+    container_name: llm
+    restart: always
+    environment:
+      - OLLAMA_MODELS=smollm
+    ports:
+      - "11434:11434"
+
+  api:
+    build: .
+    container_name: llm-api
+    restart: always
+    environment:
+      - MODEL_NAME=smollm
+    depends_on:
+      - llm
+    ports:
+      - "8000:8000"
+
