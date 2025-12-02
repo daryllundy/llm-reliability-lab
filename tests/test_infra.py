@@ -1,6 +1,6 @@
 import yaml
 import os
-import pytest
+
 
 def load_yaml(filepath):
     with open(filepath, 'r') as f:
