@@ -21,12 +21,9 @@
 # Logs
 /*.log
 
-<<<<<<< HEAD
 # Documentation
 /docs/
 
-=======
->>>>>>> claude/analyze-codebase-improvements-01FTpLdr5QUmDegMiC74X2wV
 # OS files
 .DS_Store
 
