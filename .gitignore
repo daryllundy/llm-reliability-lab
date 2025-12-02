@@ -1,0 +1,28 @@
+# Python
+/.coverage
+/coverage/
+/__pycache__/
+*.py[cod]
+*.so
+
+# Dependencies
+/node_modules
+/package-lock.json
+
+# Environment variables
+/.env
+
+# Build artifacts
+/build/
+/caches/
+/.idea/
+*.swp
+
+# Logs
+/*.log
+
+# OS files
+.DS_Store
+
+# Git
+.git
