@@ -4,7 +4,7 @@ A production-style SRE sandbox that serves an LLM endpoint, injects failures, tr
 
 ## 🎯 Goals
 - Demonstrate SRE fundamentals applied to inference endpoints
-- Instrument SLIs: latency, availability, error rate, container restarts
+- Instrument SLIs: latency, availability, error rate, GPU utilization
 - Run chaos tests and automated remediation
 - AI-assisted development with human review and safety guardrails
 
@@ -19,7 +19,8 @@ A production-style SRE sandbox that serves an LLM endpoint, injects failures, tr
 | Latency | `llm_request_latency_seconds_bucket` (histogram) |
 | Availability | `llm_request_total` + `llm_request_errors_total` |
 | Error Rate | `llm_request_errors_total` |
-| Self-Healing | `service_container_restarts_total` |
+| GPU Utilization | `llm_gpu_utilization_percent` (simulated) |
+| Saturation | `llm_inference_in_flight` |
 
 ## 🏁 SLO
 See **SLO.md**

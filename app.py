@@ -30,8 +30,6 @@ request_errors = Counter("llm_request_errors_total", "Total LLM errors (500s)")
 gpu_util = Gauge("llm_gpu_utilization_percent", "Simulated GPU utilization")
 inference_in_flight = Gauge("llm_inference_in_flight", "Active inference requests")
 
-container_restarts = Counter("service_container_restarts_total", "Number of container auto-restarts")
-
 class GenerateRequest(BaseModel):
     prompt: str = Field(..., min_length=1, max_length=1000)
 
@@ -42,8 +40,11 @@ def health():
 # --- Inference endpoint
 @app.post("/generate")
 def generate(request: GenerateRequest):
+    import random
     request_total.inc()
     inference_in_flight.inc()
+    # Simulate GPU utilization during inference (60-85%)
+    gpu_util.set(random.uniform(60, 85))
 
     start = time.time()
     try:
@@ -68,6 +69,7 @@ def generate(request: GenerateRequest):
     elapsed = time.time() - start
     latency_histogram.observe(elapsed)
     inference_in_flight.dec()
+    gpu_util.set(0)  # Reset GPU utilization after inference
     return {"status": "ok", "latency": elapsed}
 
 @app.get("/metrics")
