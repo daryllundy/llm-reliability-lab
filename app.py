@@ -2,9 +2,9 @@ import os
 import time
 import requests
 import logging
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Response
 from pydantic import BaseModel, Field
-from prometheus_client import Histogram, Counter, Gauge, generate_latest
+from prometheus_client import Histogram, Counter, Gauge, generate_latest, CONTENT_TYPE_LATEST
 
 # Configure logging
 logging.basicConfig(
@@ -74,7 +74,7 @@ def generate(request: GenerateRequest):
 
 @app.get("/metrics")
 def metrics():
-    return generate_latest()
+    return Response(generate_latest(), media_type=CONTENT_TYPE_LATEST)
 
 if __name__ == "__main__":
     import uvicorn

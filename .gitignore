@@ -21,12 +21,5 @@
 # Logs
 /*.log
 
-# Documentation
-/docs/
-
 # OS files
 .DS_Store
-
-# Git
-.git
-docs/

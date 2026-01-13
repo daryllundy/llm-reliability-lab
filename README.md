@@ -23,7 +23,7 @@ A production-style SRE sandbox that serves an LLM endpoint, injects failures, tr
 | Saturation | `llm_inference_in_flight` |
 
 ## 🏁 SLO
-See **SLO.md**
+See **[docs/SLO.md](docs/SLO.md)**
 
 ## 🚨 Alerts + Remediation
 Alerts trigger container restarts via the remediation script.
