@@ -1,7 +1,7 @@
 # Python
-/.coverage
-/coverage/
-/__pycache__/
+.coverage
+coverage/
+__pycache__/
 *.py[cod]
 *.so
 
