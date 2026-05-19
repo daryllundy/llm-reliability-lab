@@ -20,6 +20,8 @@
 
 # Logs
 /*.log
+/llm-reliability-lab.txt
+/*gitingest*.txt
 
 # OS files
 .DS_Store

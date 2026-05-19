@@ -13,9 +13,15 @@ def inject_failure():
     print(f"[CHAOS] Injecting failure: {' '.join(cmd)}")
     subprocess.run(cmd, shell=False)
 
-while True:
-    wait = random.randint(5, 15)
-    print(f"[CHAOS] Waiting {wait}s before next fault...")
-    time.sleep(wait)
-    inject_failure()
+def main():
+    try:
+        while True:
+            wait = random.randint(5, 15)
+            print(f"[CHAOS] Waiting {wait}s before next fault...")
+            time.sleep(wait)
+            inject_failure()
+    except KeyboardInterrupt:
+        print("[CHAOS] Stopped.")
 
+if __name__ == "__main__":
+    main()

@@ -14,7 +14,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 MODEL = os.getenv("MODEL_NAME", "smollm")
-OLLAMA_URL = "http://llm:11434/api/generate"
+OLLAMA_URL = os.getenv("OLLAMA_URL", "http://host.docker.internal:11434/api/generate")
 
 app = FastAPI()
 
@@ -22,7 +22,7 @@ app = FastAPI()
 latency_histogram = Histogram(
     "llm_request_latency_seconds",
     "Latency of LLM inference requests",
-    buckets=[0.1, 0.3, 0.5, 0.8, 1.2, 2.0]
+    buckets=[0.5, 1, 2, 5, 10, 30, 60, 120, 300]
 )
 
 request_total = Counter("llm_request_total", "Total LLM requests")
@@ -48,28 +48,30 @@ def generate(request: GenerateRequest):
 
     start = time.time()
     try:
-        r = requests.post(OLLAMA_URL, json={"model": MODEL, "prompt": request.prompt}, timeout=10)
+        r = requests.post(
+            OLLAMA_URL,
+            json={"model": MODEL, "prompt": request.prompt, "stream": False},
+            timeout=60,
+        )
         r.raise_for_status()
     except requests.Timeout:
         logger.error("Ollama request timeout")
         request_errors.inc()
-        inference_in_flight.dec()
         raise HTTPException(status_code=504, detail="Request timeout")
     except requests.RequestException as e:
         logger.error(f"Ollama request failed: {e}")
         request_errors.inc()
-        inference_in_flight.dec()
         raise HTTPException(status_code=503, detail="Service unavailable")
     except Exception as e:
         logger.error(f"Unexpected error: {e}")
         request_errors.inc()
-        inference_in_flight.dec()
         raise HTTPException(status_code=500, detail="Internal server error")
-    
-    elapsed = time.time() - start
-    latency_histogram.observe(elapsed)
-    inference_in_flight.dec()
-    gpu_util.set(0)  # Reset GPU utilization after inference
+    finally:
+        elapsed = time.time() - start
+        latency_histogram.observe(elapsed)
+        inference_in_flight.dec()
+        gpu_util.set(0)  # Reset GPU utilization after inference
+
     return {"status": "ok", "latency": elapsed}
 
 @app.get("/metrics")
@@ -79,4 +81,3 @@ def metrics():
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
-
