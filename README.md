@@ -116,8 +116,8 @@ LATENCY_THRESHOLD_SECONDS=30 REMEDIATION_COOLDOWN_SECONDS=120 ./remediate.sh
 ## Tests
 
 ```bash
-pip install -r requirements.txt pytest ruff
-PYTHONPATH=. pytest
+pip install -r requirements-dev.txt
+pytest
 ruff check .
 ```
 
